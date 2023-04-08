@@ -1,0 +1,64 @@
+#!/usr/bin/python3
+from collections import deque
+import sys
+from copy import copy
+from i3ipc import Connection
+import logging
+
+
+class MonitorWorkspaceSwapper:
+    def __init__(self):
+        self.init_connection()
+
+    def init_connection(self):
+        self.i3 = Connection()
+
+    def swap_workspace_names(self, rename_map, move_focus_to_output=None):
+        already_swapped = set()
+        for new, old in rename_map.items(): # (2, 1)
+            if old not in already_swapped and new not in already_swapped:
+                self.i3.command(f'workspace {new}')                       # (2)
+                self.i3.command(f'rename workspace to {old}_temp')        # (2 -> 1_temp)
+                self.i3.command(f'workspace {old}')                       # (1)
+                self.i3.command(f'rename workspace to {rename_map[old]}') # (1 -> 2)
+                self.i3.command(f'workspace {old}_temp')                  # (1_temp)
+                self.i3.command(f'rename workspace to {old}')             # (1)
+                already_swapped.add(old)
+                already_swapped.add(new)
+        if move_focus_to_output:
+            self.i3.command(f'focus output {move_focus_to_output}')
+
+    def swap_monitors(self, move_focus_with_workspace=True):        
+        workspaces = self.i3.get_outputs()
+        moved_workspaces = deque()
+        current_monitor = None
+        for i, workspace in enumerate(workspaces):
+            name = workspace.name
+            if i == 0:
+                current_monitor = name
+            current_workspace = workspace.current_workspace
+            if name and current_workspace:
+                logging.debug(f'moving {current_workspace} right...')
+                self.i3.command(f'workspace --no-auto-back-and-forth {current_workspace}')
+                self.i3.command(f'move workspace to output right')
+                moved_workspaces.append(current_workspace)
+
+        #moved_names_original = copy(moved_workspaces)
+        #moved_workspaces.rotate(1)
+        #self.swap_workspace_names(
+        #    dict(zip(moved_workspaces, moved_names_original)), 
+        #    move_focus_to_output=current_monitor if not move_focus_with_workspace else None
+        #)
+
+
+def main(*args):
+    move_focus_with_workspace = False
+    if 'move_focus_with_workspace' in args:
+        move_focus_with_workspace = True
+    swapper = MonitorWorkspaceSwapper()
+    swapper.swap_monitors(move_focus_with_workspace=move_focus_with_workspace)
+
+
+if __name__ == '__main__':
+    # asyncio.get_event_loop().run_until_complete(main())
+    main(*sys.argv[1:])

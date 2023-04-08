@@ -1,0 +1,134 @@
+# i3 config file (v4)
+# ____________________ STARTUP: ____________________
+# exec --no-startup-id ~/.screenlayout/stdlayout.sh
+exec_always --no-startup-id picom --config $HOME/.config/picom.conf
+exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/abstract2.jpg
+# _________________________________________________
+
+
+# ______________________ VARS: _____________________
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $mod Mod4
+set $i3scripts ~/.config/i3/scripts
+set $i3lockscreen sh $i3scripts/lockscreen.sh
+include ~/.config/i3/laptop.conf
+include ~/.config/i3/common_bindings.conf
+include ~/.config/i3/gaps_configurator.conf
+
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+# __________________________________________________
+
+
+# ________________ OTHER DEFAULTS: _________________
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:monospace 12
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+
+# The combination of xss-lock, nm-applet and pactl is a popular choice, so
+# they are included here as an example. Modify as you see fit.
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+
+set $refresh_i3status killall -SIGUSR1 i3status
+
+title_align center
+
+# Border settings:
+hide_edge_borders both
+smart_borders no_gaps
+
+workspace_auto_back_and_forth yes
+focus_on_window_activation focus
+
+# Inner gaps for all windows: space between two adjacent windows (or split containers).
+gaps inner 5px
+smart_gaps on
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# move tiling windows via drag & drop by left-clicking into the title bar,
+# or left-clicking anywhere into the window while holding the floating modifier.
+tiling_drag modifier titlebar
+# __________________________________________________
+
+
+# ___________________ FLOATING: ____________________
+floating_minimum_size 50 x 50
+for_window [class="tint2conf"] floating enable
+for_window [title="Tint2 panel themes"] floating enable
+for_window [class="Shutter"] floating enable, maxsize 500px 500px # "Session - Shutter"
+for_window [class="Microsoft Teams"] floating enable, maxsize 700px 500px
+for_window [title="Terminator Preferences"] floating enable, maxsize 500px 500px
+for_window [class="x2goclient"] floating enable, maxsize 500px 500px
+for_window [class="Telegram"] floating enable, maxsize 700px 500px
+for_window [class="Lxappearance"] floating enable, maxsize 700px 500px
+# for_window [all] border none
+for_window [all] title_window_icon on
+# __________________________________________________
+
+
+# _____________________ MODES: _____________________
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (CTRL+s) shutdown
+# shutdown / restart / suspend...
+
+mode "$mode_system" {
+        bindsym l exec --no-startup-id $i3lockscreen, mode "default"
+        bindsym e exec --no-startup-id $i3scripts/i3session/i3session save && i3-msg exit, mode "default"  
+        bindsym s exec --no-startup-id $i3lockscreen && systemctl suspend, mode "default"
+        bindsym h exec --no-startup-id $i3lockscreen && systemctl hibernate, mode "default"
+        bindsym r exec --no-startup-id $i3scripts/i3session/i3session save && systemctl reboot, mode "default" 
+        bindsym Ctrl+s exec --no-startup-id $i3scripts/i3session/i3session save && systemctl poweroff -i, mode "default"
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym $mod+BackSpace mode "$mode_system"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 2 px or 2 ppt
+        bindsym k resize grow height 2 px or 2 ppt
+        bindsym l resize shrink height 2 px or 2 ppt
+        bindsym odiaeresis resize grow width 2 px or 2 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 2 px or 2 ppt
+        bindsym Down resize grow height 2 px or 2 ppt
+        bindsym Up resize shrink height 2 px or 2 ppt
+        bindsym Right resize grow width 2 px or 2 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+# __________________________________________________
