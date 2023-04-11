@@ -1,5 +1,5 @@
 # i3 config file (v4)
-# ____________________ STARTUP: ____________________
+# ___________________ STARTUP: ____________________
 # exec --no-startup-id ~/.screenlayout/stdlayout.sh
 exec_always --no-startup-id picom --config $HOME/.config/picom.conf
 exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/abstract2.jpg
@@ -94,11 +94,11 @@ set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) re
 
 mode "$mode_system" {
         bindsym l exec --no-startup-id $i3lockscreen, mode "default"
-        bindsym e exec --no-startup-id $i3scripts/i3session/i3session save && i3-msg exit, mode "default"  
+        bindsym e exec --no-startup-id i3-msg exit, mode "default"  
         bindsym s exec --no-startup-id $i3lockscreen && systemctl suspend, mode "default"
         bindsym h exec --no-startup-id $i3lockscreen && systemctl hibernate, mode "default"
-        bindsym r exec --no-startup-id $i3scripts/i3session/i3session save && systemctl reboot, mode "default" 
-        bindsym Ctrl+s exec --no-startup-id $i3scripts/i3session/i3session save && systemctl poweroff -i, mode "default"
+        bindsym r exec --no-startup-id save && systemctl reboot, mode "default" 
+        bindsym Ctrl+s exec --no-startup-id systemctl poweroff -i, mode "default"
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
