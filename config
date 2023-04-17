@@ -1,9 +1,12 @@
 # i3 config file (v4)
-# ___________________ STARTUP: ____________________
-# exec --no-startup-id ~/.screenlayout/stdlayout.sh
-exec_always --no-startup-id picom --config $HOME/.config/picom.conf
+# ___________________ STARTUP: _____________________
+exec_always --no-startup-id ~/.screenlayout/stdlayout.sh
+exec_always --no-startup-id picom --config ~/.config/picom.conf
 exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/abstract2.jpg
-# _________________________________________________
+exec_always --no-startup-id "setxkbmap -layout en,ru -option 'grp:alt_shift_toggle'"
+workspace 1 output DP-1
+workspace 2 output DP-2
+# __________________________________________________
 
 
 # ______________________ VARS: _____________________
@@ -11,7 +14,7 @@ exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/abstract2.jpg
 # We use variables to avoid repeating the names in multiple places.
 set $mod Mod4
 set $i3scripts ~/.config/i3/scripts
-set $i3lockscreen sh $i3scripts/lockscreen.sh
+set $i3lockscreen sh ~/.config/i3/scripts/lockscreen.sh
 include ~/.config/i3/laptop.conf
 include ~/.config/i3/common_bindings.conf
 include ~/.config/i3/gaps_configurator.conf
@@ -110,7 +113,7 @@ bindsym $mod+BackSpace mode "$mode_system"
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
+        # Pressing left will shrink the window’s width .
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
