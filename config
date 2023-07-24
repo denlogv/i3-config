@@ -3,8 +3,8 @@
 exec_always --no-startup-id ~/.screenlayout/stdlayout.sh
 exec_always --no-startup-id picom --config ~/.config/picom.conf
 exec_always --no-startup-id feh --bg-scale --randomize ~/Pictures/Wallpapers/
-workspace 1 output eDP-1-1 
-workspace 2 output HDMI-1-1
+workspace 1 output DP-1
+workspace 2 output DP-2
 # __________________________________________________
 
 
