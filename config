@@ -2,7 +2,6 @@
 # ___________________ STARTUP: _____________________
 exec_always --no-startup-id ~/.screenlayout/stdlayout.sh
 exec_always --no-startup-id picom --config ~/.config/picom.conf
-# exec_always --no-startup-id feh --bg-scale --randomize ~/Pictures/Wallpapers/
 exec_always --no-startup-id ~/.xprofile
 exec_always --no-startup-id ~/.config/i3/scripts/set_wallpaper_from_folder.sh /usr/share/backgrounds
 workspace 1 output DP-2-1
@@ -83,17 +82,19 @@ mouse_warping none
 
 # ___________________ FLOATING: ____________________
 floating_minimum_size 50 x 50
-# floating_maximum_size 1500 x 1000
+floating_maximum_size 800 x 800
+
 for_window [class="tint2conf"] floating enable
 for_window [title="Tint2 panel themes"] floating enable
 for_window [class="Shutter"] floating enable, maxsize 500px 500px # "Session - Shutter"
 # for_window [class="Microsoft Teams"] floating enable, maxsize 700x500
 for_window [title="Terminator Preferences"] floating enable, maxsize 500px 500px
-for_window [class="x2goclient"] floating enable, resize set 640 480
+for_window [title="X2Go Client"] floating enable, resize set 640 640
 for_window [class="Telegram"] floating enable, maxsize 700px 500px
 for_window [class="Lxappearance"] floating enable, maxsize 700px 500px
 # for_window [all] border none
 for_window [all] title_window_icon on
+for_window [title="Battery Warning"] sticky enable                         
 # __________________________________________________
 
 
